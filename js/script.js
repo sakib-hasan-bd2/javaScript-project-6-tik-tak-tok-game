@@ -1,5 +1,5 @@
 let currentPlayer = 'X';
-let gameBord = ['', '', '', '', '', '', '', '', ''];
+let gameBoard = ['', '', '', '', '', '', '', '', ''];
 let gameActive = true;
 
 const board = document.getElementById('board');
@@ -14,20 +14,21 @@ function cellclick(e) {
   const cell = e.target;
   const cellIndex = parseFloat(cell.getAttribute('data-index'));
 
-  if (gameBord[cellIndex] !== '' || gameActive === false) {
+  if (gameBoard[cellIndex] !== '' || gameActive === false) {
     return;
   }
-  gameBord[cellIndex] = currentPlayer;
+  gameBoard[cellIndex] = currentPlayer;
   // cell.innerHTML = currentPlayer;
   cell.innerText = currentPlayer;
   if (checkWinner()) {
     document.querySelector('.status').innerHTML = `win Player '${currentPlayer}' `;
     gameActive = false;
-    heighlightWinner();
+    highlightWinner();
+    corse();
     return;
   }
   if (checkDrow()) {
-    document.querySelector('.status').innerHTML = `Drow`;
+    document.querySelector('.status').innerHTML = `Draw`;
     gameActive = false;
     return;
   }
@@ -49,17 +50,17 @@ function checkWinner() {
   ];
   return wincombination.some((combination) => {
     const [a, b, c] = combination;
-    return gameBord[a] !== '' && gameBord[a] === gameBord[b] && gameBord[a] === gameBord[c];
+    return gameBoard[a] !== '' && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c];
   })
 }
 
 function checkDrow() {
-  return gameBord.every((hello) => {
+  return gameBoard.every(hello => {
     return hello !== '';
-  })
+  });
 }
 
-function heighlightWinner() {
+function highlightWinner() {
   const wincombination = [
     [0, 1, 2],
     [3, 4, 5],
@@ -74,13 +75,20 @@ function heighlightWinner() {
   for (let combination of wincombination) {
     const [a, b, c] = combination;
 
-    if (gameBord[a] !== '' && gameBord[a] === gameBord[b] && gameBord[a] === gameBord[c]) {
-
-      combination.map((item) => {
-        document.querySelector(`.cell[data-index="${item}"]`).classList.add('wining-cell');
-      })
-      
+    if (
+      gameBoard[a] !== '' &&
+      gameBoard[a] === gameBoard[b] &&
+      gameBoard[a] === gameBoard[c]
+    ) {
+      combination.map(item => {
+        document
+          .querySelector(`.cell[data-index="${item}"]`)
+          .classList.add('wining-cell');
+      });
+    }
   }
-  }
-
+}
+function corse() {
+  document.querySelector('.line1').style.width = '431px';
+  document.querySelector('.line2').style.width = '431px';
 }
